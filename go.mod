@@ -1,4 +1,4 @@
-module gobaiduai
+module github.com/872409/gobaiduai
 
 go 1.16
 
