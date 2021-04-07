@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"gobaiduai/client"
+	"github.com/872409/gobaiduai/client"
 )
 
 type AuthResponseJSON struct {
