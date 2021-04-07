@@ -5,15 +5,17 @@ import (
 	"fmt"
 	"time"
 
+	gHttpClient "github.com/872409/ghttpclient"
 	"github.com/872409/gobaiduai/client"
 )
 
 type AuthResponseJSON struct {
-	Succeed    bool      `json:"-"`
-	Error      error     `json:"-"`
-	ErrorCode  int       `json:"error_code,int"`
-	ErrorMsg   string    `json:"error_msg"`
-	ResponseAt time.Time `json:"-"`
+	Succeed      bool      `json:"-"`
+	Error        error     `json:"-"`
+	ErrorCode    int       `json:"error_code,int"`
+	ErrorMsg     string    `json:"error_msg"`
+	ResponseAt   time.Time `json:"-"`
+	ResponseBody string    `json:"-"`
 }
 
 var _ client.JSONResponseBodyInterface = &AuthResponseJSON{}
@@ -22,8 +24,9 @@ func (j *AuthResponseJSON) SetError(err error) {
 	j.Error = err
 }
 
-func (j *AuthResponseJSON) AfterResponse() {
+func (j *AuthResponseJSON) AfterResponseJSON(resp *gHttpClient.JSONResponse) {
 	j.ResponseAt = time.Now()
+	j.ResponseBody = resp.GetBodyText()
 
 	if j.Error != nil {
 		j.ErrorCode = -500

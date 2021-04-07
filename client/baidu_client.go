@@ -14,15 +14,16 @@ const (
 
 type JSONResponseBodyInterface interface {
 	SetError(err error)
-	AfterResponse()
+	AfterResponseJSON(resp *gHttpClient.JSONResponse)
 }
 
 func (j *AccessTokenResp) SetError(err error) {
 	j.Error = err
 }
 
-func (j *AccessTokenResp) AfterResponse() {
+func (j *AccessTokenResp) AfterResponseJSON(resp *gHttpClient.JSONResponse) {
 	j.ResponseAt = time.Now()
+	j.ResponseBody = resp.GetBodyText()
 
 	if j.Error != nil {
 		j.ErrorCode = j.Error.Error()
@@ -40,6 +41,7 @@ type AccessTokenResp struct {
 	Error            error     `json:"-"`
 	ErrorCode        string    `json:"error"`
 	ErrorDescription string    `json:"error_description"`
+	ResponseBody     string    `json:"-"`
 	ResponseAt       time.Time `json:"-"`
 
 	RefreshToken  string `json:"refresh_token"`
@@ -114,7 +116,7 @@ func (b *BaiduClient) POST(url string, urlParam, postData map[string]interface{}
 		jsonResponseBodyInterface.SetError(err)
 	}
 
-	jsonResponseBodyInterface.AfterResponse()
+	jsonResponseBodyInterface.AfterResponseJSON(resp)
 
 	return resp
 }
