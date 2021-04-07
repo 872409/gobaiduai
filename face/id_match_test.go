@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"gobaiduai/client"
+	"github.com/872409/gobaiduai/client"
 )
 
 func NewFaceClient() *FaceClient {
 	c, e := NewFace(client.Config{
-		ClientId:     "dd",
-		ClientSecret: "vv",
+
 	})
 
 	fmt.Printf("e %v\n", e)
